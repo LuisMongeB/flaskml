@@ -10,8 +10,8 @@ app=Flask(__name__)
 
 #to tell flask what url shoud trigger the function index()
 @app.route('/')
-def index():
-    return flask.render_template('index.html')
+def index(name):
+    return flask.render_template('index.html', name=name)
 
 #prediction function
 def ValuePredictor(to_predict_list):
@@ -21,7 +21,7 @@ def ValuePredictor(to_predict_list):
     return result[0]
 
 
-@app.route('/result',methods = ['POST'])
+@app.route('/result', methods = ['POST'])
 def result():
     if request.method == 'POST':
         to_predict_list = request.form.to_dict()
