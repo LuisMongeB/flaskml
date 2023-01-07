@@ -1,0 +1,23 @@
+.carousel-item {
+    height: 32rem;
+    background: rgb(197, 197, 197);
+    color: white;
+    position: relative;
+    background-position: center;
+    background-size: cover;
+}
+
+.carousel-control-prev {
+    color: rgb(255, 255, 255) !important;
+    opacity: 1 !important;
+}
+
+.carousel-control-next {
+    color: rgb(255, 255, 255) !important;
+    opacity: 1 !important;
+    height: auto;
+}
+
+.carousel-title {
+    color: rgb(39, 100, 181) !important;
+}
