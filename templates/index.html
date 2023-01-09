@@ -2,9 +2,9 @@
 
 {% block content %}
 
-	
+	<!-- Carousel -->
+	<main>
 	<div class="container mt-5">
-		<h1 class="carousel-title text-center">Deep Dream Examples</h1>
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 			<ol class="carousel-indicators">
 				<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -29,9 +29,48 @@
 			</a>
 		  </div>
 	</div>
-	<script>
-		$(document).ready(function() {
-			$("#carouselExampleIndicators").carousel();
-		});
-	</script>
+
+	<!-- Problem to fix -->
+	<div class="container main-content">
+
+		<p class="pt-5 text-justify">
+			Traditionally, neural networks have performed well but it has been difficult to explain how they make their predictions. It was the case for image classification and this earned them the name of <a href="https://en.wikipedia.org/wiki/Black_box" target="_blank">black boxes</a>. For this reason in 2015, Software Engineers from Google found <a href="https://ai.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html" target="_blank">techniques</a> to understand what neural networks "see" in the images they process.
+		</p>
+		<br>
+		<p>
+		In order to understand the technique that Google researchers found, we first need to understand <strong>gradient descent</strong>.
+		</p>
+		<br>
+
+		<h2 class="text-center">What is gradient descent?</h1>
+		<br>
+
+		<p>
+		Imagine that you are standing at the top of a hill and want to find the lowest point. You can see the surrounding landscape, but you can't see the ground directly beneath your feet. You can take small steps in different directions and measure the slope of the ground to get a sense of which way is downhill. You can then take a step in that direction, and repeat the process until you reach the lowest point. This process is similar to gradient descent.
+		</p>
+
+		<br>
+		<p>
+			The parameters of the model are like our position on the hill, and the slope of the hill at that point is the <strong><em>cost function</em>.</strong>
+			To find the lowest point, we start at some initial values for the <strong><em>parameters</em></strong> and then repeatedly take small steps in the direction that decreases the value of the cost function. 
+			The size of the step is called the <strong><em>learning rate</em></strong>. Too little and it will take us a long time to reach the lowest point, too big and we might overstep (and fall from a cliff). We do this by calculating the slope of the cost function at each step and moving in the opposite direction. We continue this process until the cost function is minimized or we reach a predetermined stopping point.
+		</p>
+		<br>
+		
+		<!-- Grad Descent Gif -->
+		<figure>
+			<img src="static/index-main-content/gradient_descent.gif" class="mx-auto d-block" alt="Example of Gradient Descent take from Wikipedia.">
+			<figcaption class="pt-2" ><em>Example of Gradient Descent from Wikimedia Commons.</em></figcaption>
+		</figure>
+
+		<br>
+		<p>
+
+		</p>
+	</div>
+</main>
+
+<footer>
+	<!-- Fill this with footer information and a different background color-->
+</footer>
 {% endblock %}
