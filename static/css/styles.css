@@ -37,3 +37,7 @@ figure figcaption {
     max-width: 360;
     font-size: 12px;
 }
+
+h2 {
+    text-align: center;
+}
