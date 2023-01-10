@@ -40,4 +40,24 @@ figure figcaption {
 
 h2 {
     text-align: center;
+    font-size:6em !important;
+    background-image: url(/static/logo.png);
+    background-repeat: repeat;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+div.main-content {
+    font-size: 1.1em;
+}
+
+div.header h1 {    
+    text-align: center;
+    font-size: 7em !important;
+    background-image: url(/static/logo.png);
+    background-repeat: repeat;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
 }
