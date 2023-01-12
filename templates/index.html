@@ -91,8 +91,11 @@
 		In DeepDream, the optimization process is used in reverse. Rather than trying to minimize the loss function, the goal is to maximize the activation of a particular layer in the CNN by modifying the pixels in the input image. The gradients of the activations with respect to the input image are computed and used to update the pixels in a way that increases the activations. This process is repeated until the desired level of activation is reached, resulting in an image that is "enhanced" for the features that the CNN was trained to recognize.
 		</p>
 		<h2>Let's try it out!</h2>
-		<p>Insert button here</p>
-			
+		
+		<form method="post" class="text-center pt-5 pb-5">
+			<!-- ADD TRIPPY BACKGROUND IMAGE-->
+			<a href="{{ url_for('create') }}" class="btn btn-info" role="button">Create</a>
+		</form>
 	</div>
 </main>
 
