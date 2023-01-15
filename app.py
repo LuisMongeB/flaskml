@@ -10,8 +10,10 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
+# Models
+from models.definitions.resnets import ResNet50
+
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # At this point of the project I won't be using a db for two reasons:
 # first, I won't be saving the images that users send as a matter of respect to privacy 
@@ -38,22 +40,16 @@ class UploadForm(FlaskForm):
 
     submit = SubmitField('Upload')
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+class GenerateForm(FlaskForm):
+    # TODO: Add fields for different deep dream parameters
+    submit = SubmitField('Generate')
 
 #to tell flask what url shoud trigger the function index()
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
     if request.method == 'POST':
-        if request.form.get('action1') == 'VALUE1':
-            pass # do something
-        elif  request.form.get('action2') == 'VALUE2':
-            pass # do something else
-        else:
-            pass # unknown
+        pass
     elif request.method == 'GET':
         pass
          # return render_template('index.html', form=form)
@@ -73,14 +69,25 @@ def create():
         # inference
         # pass it back to create.html
 
-        form = UploadForm()
-        if form.validate_on_submit():
-            filename = photos.save(form.photo.data)
+        upform = UploadForm()
+        genform = GenerateForm()
+
+        if upform.validate_on_submit():
+            filename = photos.save(upform.photo.data)
             file_url =  url_for('get_file', filename=filename)
         else:
             file_url = None
 
-        return render_template('create.html', form=form, file_url=file_url)
+        if genform.validate_on_submit():
+            file_url =  url_for('get_file', filename=filename)
+            # DL stuff happens here
+
+
+
+            return render_template('create.html', form=genform, file_url=file_url)
+        
+
+        return render_template('create.html', form=upform, file_url=file_url)
    
 
 
