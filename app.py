@@ -12,6 +12,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # Models
 from models.definitions.resnets import ResNet50
+from utils.deepdream import gradient_ascent, deep_dream_static_image
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 
@@ -72,15 +73,41 @@ def create():
         upform = UploadForm()
         genform = GenerateForm()
 
+        # User Uploading
         if upform.validate_on_submit():
             filename = photos.save(upform.photo.data)
             file_url =  url_for('get_file', filename=filename)
         else:
             file_url = None
 
+        # User Generating
         if genform.validate_on_submit():
+            # Where we will read image
             file_url =  url_for('get_file', filename=filename)
             # DL stuff happens here
+            # Model Parameters (a dictionary for now)
+            model_config = {'input': 'figures.jpg',
+                            'img_width': 600,
+                            'layers_to_use': ['relu4_3'],
+                            'model_name': 'RESNET50', 
+                            'pretrained_weights': 'PLACES_365',
+                            'pyramid_size': 4,
+                            'pyramid_ratio': 1.8,
+                            'num_gradient_ascent_iterations': 10,
+                            'lr': 0.09,
+                            'create_ouroboros': False,
+                            'ouroboros_length': 30,
+                            'fps': 30,
+                            'frame_transform': 'ZOOM_ROTATE',
+                            'blend': 0.85,
+                            'should_display': False,
+                            'spatial_shift_size': 32,
+                            'smoothing_coefficient': 0.5,
+                            'use_noise': False,
+                            'dump_dir': '/../data/out-images/RESNET50_PLACES_365', 'input_name': 'figures.jpg'}
+            # Wrapping configuration into a dictionary
+            
+
 
 
 
