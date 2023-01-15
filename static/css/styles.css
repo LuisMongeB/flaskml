@@ -103,3 +103,15 @@ img.displayed-image {
     border: 5px solid rgba(0, 0, 0, 0.8) !important;
     align-items: center !important;
 }
+
+a.btn.border {
+    font-size: 1.2em;
+    background-image: url(/static/logo.png);
+    background-image: url(/static/logo.png);
+    background-repeat: repeat;
+    color: white;
+    -webkit-background-clip: border-box;
+    background-clip: text;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: black;
+}
