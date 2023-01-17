@@ -12,7 +12,9 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # Models
 from models.definitions.resnets import ResNet50
-from utils.deepdream import gradient_ascent, deep_dream_static_image
+from deepdream import gradient_ascent, deep_dream_static_image
+from utils.constants import *
+from utils.utils import *
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 
@@ -43,6 +45,7 @@ class UploadForm(FlaskForm):
 
 class GenerateForm(FlaskForm):
     # TODO: Add fields for different deep dream parameters
+    photo = FileField(FileAllowed(photos))
     submit = SubmitField('Generate')
 
 #to tell flask what url shoud trigger the function index()
@@ -77,16 +80,16 @@ def create():
         if upform.validate_on_submit():
             filename = photos.save(upform.photo.data)
             file_url =  url_for('get_file', filename=filename)
-        else:
-            file_url = None
+            return render_template('create.html', form=genform, file_url=file_url)
 
         # User Generating
         if genform.validate_on_submit():
             # Where we will read image
+            filename = photos.save(upform.photo.data)
             file_url =  url_for('get_file', filename=filename)
             # DL stuff happens here
             # Model Parameters (a dictionary for now)
-            model_config = {'input': 'figures.jpg',
+            model_config = {'input': file_url,
                             'img_width': 600,
                             'layers_to_use': ['relu4_3'],
                             'model_name': 'RESNET50', 
@@ -104,14 +107,21 @@ def create():
                             'spatial_shift_size': 32,
                             'smoothing_coefficient': 0.5,
                             'use_noise': False,
-                            'dump_dir': '/../data/out-images/RESNET50_PLACES_365', 'input_name': 'figures.jpg'}
+                            'dump_dir': OUT_IMAGES_PATH, 
+                            'input_name': file_url.split('/')[-1]}
             # Wrapping configuration into a dictionary
-            
-
-
-
+            print(model_config)
+            generated_image = deep_dream_static_image(model_config, img=None)
+            dump_path = save_and_maybe_display_image(model_config, generated_image)
+            file_url = dump_path
 
             return render_template('create.html', form=genform, file_url=file_url)
+
+        else:
+            file_url = None
+
+
+            
         
 
         return render_template('create.html', form=upform, file_url=file_url)
