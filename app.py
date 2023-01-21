@@ -89,7 +89,7 @@ def upload():
 
         return redirect(url_for('to_generate', upload_id=upload.id))
 
-    return render_template('create_with_db.html')
+    return render_template('create.html')
 
 @app.route('/generate/<int:upload_id>')
 def to_generate(upload_id):
