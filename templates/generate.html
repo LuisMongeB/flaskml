@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-6 mx-auto mt-5 text-center">
+
+            <h1 class="mb-2">Dreamify Your Image</h1>
+
+            <div class="row justify-content-center">
+                <div ckass="col-auto">
+                    {% if to_generate %}
+                        <div class="mt-3">
+                            <img src="data:image/png;base64,{{ to_generate | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
+                        </div>
+                    {% else %}
+                        <h1 class="center">No image found.</h1>
+                    {% endif %}
+                    <!-- Insert Generate Button -->
+                    <!-- Insert model parameters -->
+                </div>
+            </div>
+            </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
