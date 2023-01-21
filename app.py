@@ -1,11 +1,14 @@
 #importing libraries
+from io import BytesIO
+import base64
 import os
 import numpy as np
 import pickle
 import os
 # Flask
-from flask import Flask, flash, request, redirect, url_for, render_template, send_from_directory
+from flask import Flask, flash, request, redirect, url_for, render_template
 from flask_uploads import UploadSet, IMAGES, configure_uploads
+from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from wtforms import SubmitField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
@@ -15,8 +18,11 @@ from models.definitions.resnets import ResNet50
 from deepdream import gradient_ascent, deep_dream_static_image
 from utils.constants import *
 from utils.utils import *
+from flask_sqlalchemy import SQLAlchemy
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+# from db import db_init, db
+# from db_models import Img, Upload
+
 
 # At this point of the project I won't be using a db for two reasons:
 # first, I won't be saving the images that users send as a matter of respect to privacy 
@@ -28,25 +34,29 @@ UPLOAD_FOLDER = os.path.join('static', 'uploads')
 # Creating instance of the class
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '592716490af3ccea41cbc1e68e1fc7e3d6f0656d3990af9f'
-app.config['UPLOADED_PHOTOS_DEST'] = UPLOAD_FOLDER
+# SQLAlchemy config
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-photos = UploadSet('photos', IMAGES)
-configure_uploads(app, photos)
+db = SQLAlchemy(app)
 
-class UploadForm(FlaskForm):
-    photo = FileField(
-        validators=[
-            FileAllowed(photos, 'Only Images are allowed'),
-            FileRequired('File field should not be empty')
-        ]
-    )
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-    submit = SubmitField('Upload')
 
-class GenerateForm(FlaskForm):
-    # TODO: Add fields for different deep dream parameters
-    photo = FileField(FileAllowed(photos))
-    submit = SubmitField('Generate')
+class Upload(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary)
+    mimetype = db.Column(db.String(20))
+
+class Generate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary)
+    mimetype = db.Column(db.String(20))
 
 #to tell flask what url shoud trigger the function index()
 @app.route('/', methods=['GET', 'POST'])
@@ -54,15 +64,8 @@ def index():
 
     if request.method == 'POST':
         pass
-    elif request.method == 'GET':
-        pass
-         # return render_template('index.html', form=form)
-    
-    return render_template("index.html")
-
-@app.route('/uploads/<filename>')
-def get_file(filename):
-    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
+    else:
+        return render_template("index.html")
 
 @app.route('/create/', methods=['GET', 'POST'])
 def create():
@@ -72,7 +75,23 @@ def create():
         # format it in the way the model wants
         # inference
         # pass it back to create.html
-
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        flash('No image selected for uploading')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        #print('upload_image filename: ' + filename)
+        flash('Image successfully uploaded and displayed below')
+        return render_template('index.html', filename=filename)
+    else:
+        flash('Allowed image types are - png, jpg, jpeg, gif')
+        return redirect(request.url)
+        '''
         upform = UploadForm()
         genform = GenerateForm()
 
@@ -80,16 +99,56 @@ def create():
         if upform.validate_on_submit():
             filename = photos.save(upform.photo.data)
             file_url =  url_for('get_file', filename=filename)
-            return render_template('create.html', form=genform, file_url=file_url)
+            return render_template('create.html', form=genform, file_url=file_url, generate=None)
 
-        # User Generating
+        else:
+            file_url = None
+
+        return render_template('create.html', form=upform, file_url=file_url)
+        '''
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+
+    if request.method == 'POST':
+        file = request.files['file']
+        # validate upload mimetype
+        if file.filename == '':
+            flash('No image selected for uploading')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+        if Upload.query.filter_by(filename=file.filename).first():
+            return f"File {file.filename} already exists", 405
+
+        upload = Upload(filename=file.filename, data=file.read(), mimetype=file.mimetype)
+        db.session.add(upload)
+        db.session.commit()
+
+        return redirect(url_for('to_generate', upload_id=upload.id))
+
+    return render_template('create_with_db.html', to_generate=None)
+
+@app.route('/display_image/<int:upload_id>')
+def to_generate(upload_id):
+    upload = Upload.query.filter_by(id=upload_id).first()
+    # decode image data
+    base64_encoded_image = base64.b64encode(upload.data).decode("utf-8")
+
+    return render_template('generate.html', to_generate=base64_encoded_image)
+
+
+@app.route('/generate/', methods=['GET', 'POST'])
+def display_image():
+    '''
+            # User Generating
         if genform.validate_on_submit():
             # Where we will read image
-            filename = photos.save(upform.photo.data)
+            filename = photos.load(upform.photo.id)
             file_url =  url_for('get_file', filename=filename)
             # DL stuff happens here
             # Model Parameters (a dictionary for now)
-            model_config = {'input': file_url,
+            model_config = {'input': f"{os.getcwd()}/static/{file_url}",
                             'img_width': 600,
                             'layers_to_use': ['relu4_3'],
                             'model_name': 'RESNET50', 
@@ -111,22 +170,14 @@ def create():
                             'input_name': file_url.split('/')[-1]}
             # Wrapping configuration into a dictionary
             print(model_config)
+            print(file_url)
             generated_image = deep_dream_static_image(model_config, img=None)
             dump_path = save_and_maybe_display_image(model_config, generated_image)
             file_url = dump_path
 
-            return render_template('create.html', form=genform, file_url=file_url)
-
-        else:
-            file_url = None
-
-
-            
-        
-
-        return render_template('create.html', form=upform, file_url=file_url)
-   
-
+            return render_template('create.html', form=genform, file_url=file_url, generate=None)
+    '''
+    pass
 
 @app.route('/about')
 def about():
