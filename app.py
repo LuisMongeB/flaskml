@@ -67,47 +67,7 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route('/create/', methods=['GET', 'POST'])
-def create():
-        # Here we get into interesting things
-        # we process the images through our model
-        # receive the image
-        # format it in the way the model wants
-        # inference
-        # pass it back to create.html
-    if 'file' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
-    file = request.files['file']
-    if file.filename == '':
-        flash('No image selected for uploading')
-        return redirect(request.url)
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        #print('upload_image filename: ' + filename)
-        flash('Image successfully uploaded and displayed below')
-        return render_template('index.html', filename=filename)
-    else:
-        flash('Allowed image types are - png, jpg, jpeg, gif')
-        return redirect(request.url)
-        '''
-        upform = UploadForm()
-        genform = GenerateForm()
-
-        # User Uploading
-        if upform.validate_on_submit():
-            filename = photos.save(upform.photo.data)
-            file_url =  url_for('get_file', filename=filename)
-            return render_template('create.html', form=genform, file_url=file_url, generate=None)
-
-        else:
-            file_url = None
-
-        return render_template('create.html', form=upform, file_url=file_url)
-        '''
-
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/create', methods=['GET', 'POST'])
 def upload():
 
     if request.method == 'POST':
@@ -118,8 +78,10 @@ def upload():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+        # If file already exists do not commit uploaded file, just extract its id and redirect
         if Upload.query.filter_by(filename=file.filename).first():
-            return f"File {file.filename} already exists", 405
+            image = Upload.query.filter_by(filename=file.filename).first()
+            return redirect(url_for('to_generate', upload_id=image.id))
 
         upload = Upload(filename=file.filename, data=file.read(), mimetype=file.mimetype)
         db.session.add(upload)
@@ -127,9 +89,9 @@ def upload():
 
         return redirect(url_for('to_generate', upload_id=upload.id))
 
-    return render_template('create_with_db.html', to_generate=None)
+    return render_template('create_with_db.html')
 
-@app.route('/display_image/<int:upload_id>')
+@app.route('/generate/<int:upload_id>')
 def to_generate(upload_id):
     upload = Upload.query.filter_by(id=upload_id).first()
     # decode image data
