@@ -1,6 +1,7 @@
 #importing libraries
 from io import BytesIO
 import base64
+from datetime import datetime
 import os
 import numpy as np
 import pickle
@@ -51,12 +52,16 @@ class Upload(db.Model):
     filename = db.Column(db.String(50))
     data = db.Column(db.LargeBinary)
     mimetype = db.Column(db.String(20))
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+
 
 class Generate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(50))
     data = db.Column(db.LargeBinary)
     mimetype = db.Column(db.String(20))
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+
 
 #to tell flask what url shoud trigger the function index()
 @app.route('/', methods=['GET', 'POST'])
@@ -91,13 +96,16 @@ def upload():
 
     return render_template('create.html')
 
-@app.route('/generate/<int:upload_id>')
+@app.route('/generate/<int:upload_id>', methods=['POST', 'GET'])
 def to_generate(upload_id):
-    upload = Upload.query.filter_by(id=upload_id).first()
-    # decode image data
-    base64_encoded_image = base64.b64encode(upload.data).decode("utf-8")
+    if request.method == 'POST':
+        return f"This worked! {upload_id}"
+    else:
+        upload = Upload.query.filter_by(id=upload_id).first()
+        # decode image data
+        base64_encoded_image = base64.b64encode(upload.data).decode("utf-8")
 
-    return render_template('generate.html', to_generate=base64_encoded_image)
+        return render_template('generate.html', to_generate=base64_encoded_image, upload_id=upload_id)
 
 
 @app.route('/generate/', methods=['GET', 'POST'])
