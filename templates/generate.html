@@ -13,6 +13,10 @@
                         <div class="mt-3">
                             <img src="data:image/png;base64,{{ to_generate | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
                         </div>
+                        <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post">
+                            <input type="submit" name="submit-button" value="Generate">
+                        </form>
+                        
                     {% else %}
                         <h1 class="center">No image found.</h1>
                     {% endif %}
