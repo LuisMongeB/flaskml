@@ -9,7 +9,6 @@ import os
 
 # Flask
 from flask import Flask, flash, request, redirect, url_for, render_template
-from flask_uploads import UploadSet, IMAGES, configure_uploads
 from werkzeug.utils import secure_filename
 
 # Models
@@ -71,8 +70,7 @@ def index():
         return render_template("index.html")
 
 @app.route('/create', methods=['GET', 'POST'])
-def upload():
-
+def create():
     if request.method == 'POST':
         file = request.files['file']
         # validate upload mimetype
@@ -159,7 +157,5 @@ def contact():
     return render_template('contact.html')
 
 
-'''
 if __name__ == "__main__":
     app.run(debug=True)
-'''

@@ -92,14 +92,10 @@
 		</p>
 		<h2>Let's try it out!</h2>
 		
-		<form method="post" class="text-center pt-5 pb-5">
+		<form method="POST" class="text-center pt-5 pb-5">
 			<!-- ADD TRIPPY BACKGROUND IMAGE-->
-			<a href="{{ url_for('upload') }}" class="btn border" role="button">Create</a>
+			<a href="{{ url_for('create') }}" class="decorated-button btn border" role="button">Create</a>
 		</form>
 	</div>
 </main>
-
-<footer>
-	<!-- Fill this with footer information and a different background color-->
-</footer>
 {% endblock %}
