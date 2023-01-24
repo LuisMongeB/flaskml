@@ -47,6 +47,8 @@ h2 {
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
 }
 
 div.main-content {
@@ -104,7 +106,7 @@ img.displayed-image {
     align-items: center !important;
 }
 
-a.btn.border {
+/* a.btn.border {
     font-size: 1.2em;
     background-image: url(/static/logo.png);
     background-image: url(/static/logo.png);
@@ -114,4 +116,24 @@ a.btn.border {
     background-clip: text;
     -webkit-text-stroke-width: 0.5px;
     -webkit-text-stroke-color: black;
+}
+*/
+.decorated-button {
+    font-size: 1.3em !important;
+    width: 100px;
+    height: 50px;
+    background-image: url(/static/logo.png);
+    background-image: url(/static/logo.png);
+    background-repeat: repeat;
+    color: white !important;
+    -webkit-background-clip: border-box;
+    background-clip: text;
+    -webkit-text-stroke-width: 0.2px;
+    -webkit-text-stroke-color: black;
+    display: inline-flex !important;
+    align-items: center;
+}
+
+footer {
+    background-color: rgb(219, 219, 217);
 }
