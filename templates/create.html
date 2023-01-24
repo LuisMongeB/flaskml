@@ -2,13 +2,19 @@
 
 {% block content %}
 
-<div class="center">
-
-    <form method="POST" action="/create" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <button>Submit</button>
-    </form>
-
+<div class="container-lg justify-content-center my-5">
+    <div class="text-center">
+        <h2>Generate</h2>
+    </div>
+    <div class="row justify-content-center my-5">
+        <div class="col-lg-6">
+        <form method="POST" action="/create" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <button type="submit">Submit</button>
+        </form>
+        </div>
+    </div>
+    
 </div>
 
 {% endblock %}
