@@ -115,3 +115,10 @@ a.btn.border {
     -webkit-text-stroke-width: 0.5px;
     -webkit-text-stroke-color: black;
 }
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
