@@ -6,13 +6,11 @@ import os
 import numpy as np
 import pickle
 import os
+
 # Flask
 from flask import Flask, flash, request, redirect, url_for, render_template
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from werkzeug.utils import secure_filename
-from flask_wtf import FlaskForm
-from wtforms import SubmitField
-from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # Models
 from models.definitions.resnets import ResNet50
@@ -99,7 +97,9 @@ def upload():
 @app.route('/generate/<int:upload_id>', methods=['POST', 'GET'])
 def to_generate(upload_id):
     if request.method == 'POST':
-        return f"This worked! {upload_id}"
+        # model stuff happens here
+        image = Upload.query.filter_by(id=upload_id).first()
+        return f"This worked! {image.data}"
     else:
         upload = Upload.query.filter_by(id=upload_id).first()
         # decode image data
