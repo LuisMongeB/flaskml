@@ -40,10 +40,10 @@ SUPPORTED_VIDEO_FORMATS = ['.mp4']
 SUPPORTED_IMAGE_FORMATS = ['.jpg', '.jpeg', '.png', '.bmp']
 
 BINARIES_PATH = os.path.join(os.path.dirname(__file__), os.pardir, 'models', 'binaries')
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), os.pardir, 'static', 'uploads')
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), os.pardir, 'static')
 
-INPUT_DATA_PATH = os.path.join(DATA_DIR_PATH, 'static', 'uploads')
-OUT_IMAGES_PATH = os.path.join(DATA_DIR_PATH, 'static', 'generated')
+INPUT_DATA_PATH = os.path.join(DATA_DIR_PATH, 'uploads')
+OUT_IMAGES_PATH = os.path.join(DATA_DIR_PATH, 'generated')
 # OUT_VIDEOS_PATH = os.path.join(DATA_DIR_PATH, 'out-videos')
 # OUT_GIF_PATH = os.path.join(OUT_VIDEOS_PATH, 'GIFS')
 
