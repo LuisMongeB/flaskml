@@ -3,12 +3,11 @@ from io import BytesIO
 import base64
 from datetime import datetime
 import os
-import numpy as np
 import pickle
-import os
 
 # Flask
-from flask import Flask, flash, request, redirect, url_for, render_template
+from flask import Flask, flash, request, redirect, url_for, render_template, send_file
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
 # Models
@@ -16,10 +15,10 @@ from models.definitions.resnets import ResNet50
 from deepdream import gradient_ascent, deep_dream_static_image
 from utils.constants import *
 from utils.utils import *
-from flask_sqlalchemy import SQLAlchemy
 
-# from db import db_init, db
-# from db_models import Img, Upload
+import cv2
+import numpy as np
+
 
 
 # At this point of the project I won't be using a db for two reasons:
@@ -73,12 +72,14 @@ def index():
 def create():
     if request.method == 'POST':
         file = request.files['file']
-        # validate upload mimetype
+        # validate upload mimetype and empty filename
         if file.filename == '':
             flash('No image selected for uploading')
             return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+        if file and not allowed_file(file.filename):
+            return f"<h1 style='display: flex;justify-content:center;align-items:center;height:100vh;'>Error: Format {file.mimetype} invalid.</h1>"
+        
+        filename = secure_filename(file.filename)
         # If file already exists do not commit uploaded file, just extract its id and redirect
         if Upload.query.filter_by(filename=file.filename).first():
             image = Upload.query.filter_by(filename=file.filename).first()
@@ -95,9 +96,19 @@ def create():
 @app.route('/generate/<int:upload_id>', methods=['POST', 'GET'])
 def to_generate(upload_id):
     if request.method == 'POST':
-        # model stuff happens here
+        # Query db
         image = Upload.query.filter_by(id=upload_id).first()
-        return f"This worked! {image.data}"
+        # Decode image for processing
+        decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
+        ##### Processing
+
+        #####
+        # Encode in bytes again
+        img_str = cv2.imencode('.jpg', decoded)[1].tostring()
+        # Base64 encoding to serve in view
+        base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
+
+        return f"This worked! <img src='data:image/png;base64,{base64_encoded_image}'/>"
     else:
         upload = Upload.query.filter_by(id=upload_id).first()
         # decode image data
