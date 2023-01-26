@@ -175,7 +175,7 @@ def deep_dream_video(config):
     shutil.rmtree(tmp_input_dir)  # remove tmp files
     print(f'Deleted tmp frame dump directory {tmp_input_dir}.')
 
-
+'''
 if __name__ == "__main__":
 
     # Only a small subset is exposed by design to avoid cluttering
@@ -218,7 +218,7 @@ if __name__ == "__main__":
     config = dict()
     for arg in vars(args):
         config[arg] = getattr(args, arg)
-    config['dump_dir'] = OUT_VIDEOS_PATH if config['create_ouroboros'] else OUT_IMAGES_PATH
+    # config['dump_dir'] = OUT_VIDEOS_PATH if config['create_ouroboros'] else OUT_IMAGES_PATH
     config['dump_dir'] = os.path.join(config['dump_dir'], f'{config["model_name"]}_{config["pretrained_weights"]}')
     config['input_name'] = os.path.basename(config['input'])
 
@@ -238,3 +238,4 @@ if __name__ == "__main__":
         dump_path = utils.save_and_maybe_display_image(config, img)
         print(f'Saved DeepDream static image to: {os.path.relpath(dump_path)}\n')
 
+'''
