@@ -6,7 +6,7 @@ import os
 import pickle
 
 # Flask
-from flask import Flask, flash, request, redirect, url_for, render_template, send_file
+from flask import Flask, flash, request, redirect, url_for, render_template, send_file, current_app
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
@@ -19,7 +19,28 @@ from utils.utils import *
 import cv2
 import numpy as np
 
+os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '1'
 
+model_config = {'input': '', # {os.getcwd()}/static/{file_url}
+                'img_width': 300,
+                'layers_to_use': ['layer3'],
+                'model_name': 'RESNET50',
+                'pretrained_weights': 'PLACES_365',
+                'pyramid_size': 4,
+                'pyramid_ratio': 1.8,
+                'num_gradient_ascent_iterations': 10,
+                'lr': 0.09,
+                'create_ouroboros': False,
+                'ouroboros_length': 30,
+                'fps': 30,
+                'frame_transform': 'ZOOM_ROTATE',
+                'blend': 0.85,
+                'should_display': False,
+                'spatial_shift_size': 32,
+                'smoothing_coefficient': 0.5,
+                'use_noise': False,
+                'dump_dir': '',
+                'input_name': ''} # os.path.basename(config['input'])  # handle absolute and relative paths
 
 # At this point of the project I won't be using a db for two reasons:
 # first, I won't be saving the images that users send as a matter of respect to privacy 
@@ -98,65 +119,60 @@ def to_generate(upload_id):
     if request.method == 'POST':
         # Query db
         image = Upload.query.filter_by(id=upload_id).first()
+        if Generate.query.filter_by(filename=image.filename).first():
+            image = Generate.query.filter_by(filename=image.filename).first()
+            decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
+            out_mimetype = f".{image.mimetype.split('/')[1]}"
+            img_str = cv2.imencode(out_mimetype, decoded)[1].tostring()
+            base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
+        
+            return render_template('generate.html', to_generate=False, upload_id=upload_id, generated=base64_encoded_image)
+
         # Decode image for processing
         decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
+        cv2.imwrite('decoded.jpg', decoded)
         ##### Processing
+        # This will later be setup with user input
+        user_model_config = model_config.copy()
+        # Fill in input and input name keys
+        # Instead of dump_dir we will save it in the generate db
+        user_model_config['input'] = ''
+        user_model_config['input_name'] = ''
+        out_image = deep_dream_static_image(user_model_config, decoded)
+        # print(user_model_config)
+        # print(out_image)
+        out_image = out_image * 255.0
+        out_image = out_image.astype(np.uint8)
+        
+        # cv2.imwrite("test_input.jpg", out_image)
 
         #####
         # Encode in bytes again
-        img_str = cv2.imencode('.jpg', decoded)[1].tostring()
         # Base64 encoding to serve in view
+        out_mimetype = f".{image.mimetype.split('/')[1]}"
+        img_str = cv2.imencode(out_mimetype, out_image)[1].tostring()
         base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
-
-        return f"This worked! <img src='data:image/png;base64,{base64_encoded_image}'/>"
+        
+        # Save to generate table
+        generated = Generate(filename=image.filename, data=img_str, mimetype=image.mimetype)
+        db.session.add(generated)
+        db.session.commit()
+        
+        
+        # response = current_app.make_response(img_encoded.tobytes())
+        # response.headers.set('Content-Type', 'test/jpg')
+        # response.headers.set('Content-Disposition', 'attachment', filename='image.jpg')
+        # return response
+        
+        # Return generated image with button to save
+        return render_template('generate.html', to_generate=False, upload_id=image.id, generated=base64_encoded_image)
     else:
         upload = Upload.query.filter_by(id=upload_id).first()
         # decode image data
         base64_encoded_image = base64.b64encode(upload.data).decode("utf-8")
 
-        return render_template('generate.html', to_generate=base64_encoded_image, upload_id=upload_id)
+        return render_template('generate.html', to_generate=base64_encoded_image, upload_id=upload_id, generated=False)
 
-
-@app.route('/generate/', methods=['GET', 'POST'])
-def display_image():
-    '''
-            # User Generating
-        if genform.validate_on_submit():
-            # Where we will read image
-            filename = photos.load(upform.photo.id)
-            file_url =  url_for('get_file', filename=filename)
-            # DL stuff happens here
-            # Model Parameters (a dictionary for now)
-            model_config = {'input': f"{os.getcwd()}/static/{file_url}",
-                            'img_width': 600,
-                            'layers_to_use': ['relu4_3'],
-                            'model_name': 'RESNET50', 
-                            'pretrained_weights': 'PLACES_365',
-                            'pyramid_size': 4,
-                            'pyramid_ratio': 1.8,
-                            'num_gradient_ascent_iterations': 10,
-                            'lr': 0.09,
-                            'create_ouroboros': False,
-                            'ouroboros_length': 30,
-                            'fps': 30,
-                            'frame_transform': 'ZOOM_ROTATE',
-                            'blend': 0.85,
-                            'should_display': False,
-                            'spatial_shift_size': 32,
-                            'smoothing_coefficient': 0.5,
-                            'use_noise': False,
-                            'dump_dir': OUT_IMAGES_PATH, 
-                            'input_name': file_url.split('/')[-1]}
-            # Wrapping configuration into a dictionary
-            print(model_config)
-            print(file_url)
-            generated_image = deep_dream_static_image(model_config, img=None)
-            dump_path = save_and_maybe_display_image(model_config, generated_image)
-            file_url = dump_path
-
-            return render_template('create.html', form=genform, file_url=file_url, generate=None)
-    '''
-    pass
 
 @app.route('/about')
 def about():
