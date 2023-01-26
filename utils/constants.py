@@ -10,7 +10,7 @@ IMAGENET_MEAN_1 = np.array([0.485, 0.456, 0.406], dtype=np.float32)
 IMAGENET_STD_1 = np.array([0.229, 0.224, 0.225], dtype=np.float32)
 
 
-DEVICE = torch.device("mps" if torch.cuda.is_available() else "cpu")  # checking whether you have a GPU
+DEVICE = torch.device("cpu")  # MPS still hasnt implemented all of it for use with Metal Performance Shaders (MPS)
 
 
 LOWER_IMAGE_BOUND = torch.tensor((-IMAGENET_MEAN_1 / IMAGENET_STD_1).reshape(1, -1, 1, 1)).to(DEVICE)
