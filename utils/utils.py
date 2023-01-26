@@ -22,11 +22,14 @@ from .constants import *
 # Image manipulation util functions
 #
 
-def load_image(img_path, target_shape=None):
-    if not os.path.exists(img_path):
-        raise Exception(f'Path does not exist: {img_path}')
-    img = cv.imread(img_path)[:, :, ::-1]  # [:, :, ::-1] converts BGR (opencv format...) into RGB
+def load_image(img, target_shape=None):
+    # Image is numpy array
+    # need to change img_path to only accept np.array 
+    # if not os.path.exists(img_path):
+    #    raise Exception(f'Path does not exist: {img_path}')
+    # img = cv.imread(img_path)[:, :, ::-1]  # [:, :, ::-1] converts BGR (opencv format...) into RGB
 
+    # from here leave the same
     if target_shape is not None:  # resize section
         if isinstance(target_shape, int) and target_shape != -1:  # scalar -> implicitly setting the width
             current_height, current_width = img.shape[:2]
