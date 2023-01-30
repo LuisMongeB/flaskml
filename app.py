@@ -21,7 +21,7 @@ import numpy as np
 
 os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '1'
 
-model_config = {'input': '', # {os.getcwd()}/static/{file_url}
+model_config = {'input': '',  # {os.getcwd()}/static/{file_url}
                 'img_width': 300,
                 'layers_to_use': ['layer3'],
                 'model_name': 'RESNET50',
@@ -40,14 +40,14 @@ model_config = {'input': '', # {os.getcwd()}/static/{file_url}
                 'smoothing_coefficient': 0.5,
                 'use_noise': False,
                 'dump_dir': '',
-                'input_name': ''} # os.path.basename(config['input'])  # handle absolute and relative paths
+                'input_name': ''}  # os.path.basename(config['input'])  # handle absolute and relative paths
 
 # At this point of the project I won't be using a db for two reasons:
-# first, I won't be saving the images that users send as a matter of respect to privacy 
+# first, I won't be saving the images that users send as a matter of respect to privacy
 # and second, I will implement the registration in another moment
 # the db will be added then.
 # This project will focus on how to use a deep learning model such as Deep Dream
-# to interact with users that will be able to transform their images into psychedelic ones. 
+# to interact with users that will be able to transform their images into psychedelic ones.
 
 # Creating instance of the class
 app = Flask(__name__)
@@ -59,7 +59,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
- 
+
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -83,7 +84,6 @@ class Generate(db.Model):
 #to tell flask what url shoud trigger the function index()
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     if request.method == 'POST':
         pass
     else:
@@ -99,20 +99,22 @@ def create():
             return redirect(request.url)
         if file and not allowed_file(file.filename):
             return f"<h1 style='display: flex;justify-content:center;align-items:center;height:100vh;'>Error: Format {file.mimetype} invalid.</h1>"
-        
+
         filename = secure_filename(file.filename)
         # If file already exists do not commit uploaded file, just extract its id and redirect
         if Upload.query.filter_by(filename=file.filename).first():
             image = Upload.query.filter_by(filename=file.filename).first()
             return redirect(url_for('to_generate', upload_id=image.id))
 
-        upload = Upload(filename=file.filename, data=file.read(), mimetype=file.mimetype)
+        upload = Upload(filename=file.filename,
+                        data=file.read(), mimetype=file.mimetype)
         db.session.add(upload)
         db.session.commit()
 
         return redirect(url_for('to_generate', upload_id=upload.id))
 
     return render_template('create.html')
+
 
 @app.route('/generate/<int:upload_id>', methods=['POST', 'GET'])
 def to_generate(upload_id):
@@ -125,45 +127,43 @@ def to_generate(upload_id):
             out_mimetype = f".{image.mimetype.split('/')[1]}"
             img_str = cv2.imencode(out_mimetype, decoded)[1].tostring()
             base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
-        
+
             return render_template('generate.html', to_generate=False, upload_id=upload_id, generated=base64_encoded_image)
 
         # Decode image for processing
         decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
         cv2.imwrite('decoded.jpg', decoded)
-        ##### Processing
+        ##### Processing ### 
         # This will later be setup with user input
         user_model_config = model_config.copy()
-        # Fill in input and input name keys
+        
         # Instead of dump_dir we will save it in the generate db
+        # Fill in input and input name keys
         user_model_config['input'] = ''
         user_model_config['input_name'] = ''
         out_image = deep_dream_static_image(user_model_config, decoded)
         # print(user_model_config)
-        # print(out_image)
+
         out_image = out_image * 255.0
         out_image = out_image.astype(np.uint8)
-        
-        # cv2.imwrite("test_input.jpg", out_image)
 
-        #####
         # Encode in bytes again
         # Base64 encoding to serve in view
         out_mimetype = f".{image.mimetype.split('/')[1]}"
         img_str = cv2.imencode(out_mimetype, out_image)[1].tostring()
         base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
-        
+
         # Save to generate table
-        generated = Generate(filename=image.filename, data=img_str, mimetype=image.mimetype)
+        generated = Generate(filename=image.filename,
+                             data=img_str, mimetype=image.mimetype)
         db.session.add(generated)
         db.session.commit()
-        
-        
+
         # response = current_app.make_response(img_encoded.tobytes())
         # response.headers.set('Content-Type', 'test/jpg')
         # response.headers.set('Content-Disposition', 'attachment', filename='image.jpg')
         # return response
-        
+
         # Return generated image with button to save
         return render_template('generate.html', to_generate=False, upload_id=image.id, generated=base64_encoded_image)
     else:
