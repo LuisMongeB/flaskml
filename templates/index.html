@@ -2,11 +2,11 @@
 
 {% block content %}
 
-	<div class="container header text-center mt-5">
-		<h1>Deep Dreamer:<span style="color:rgb(24, 7, 7)"> Create Surreal Art with Deep Learning</span></h1>
-	</div>
-	<!-- Carousel -->
-	<main>
+<div class="container header text-center mt-5">
+	<h1>Deep Dreamer:<span style="color:rgb(24, 7, 7)"> Create Surreal Art with Deep Learning</span></h1>
+</div>
+<!-- Carousel -->
+<main>
 	<div class="container mt-5">
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 			<ol class="carousel-indicators">
@@ -15,12 +15,12 @@
 				<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
 			</ol>
 			<div class="carousel-inner">
-			  <div class="carousel-item active" style="background-image: url(static/dd_examples/ex1.jpeg);">
-			  </div>
-			  <div class="carousel-item" style="background-image: url(static/dd_examples/ex2.jpeg);">
-			  </div>
-			  <div class="carousel-item" style="background-image: url(static/dd_examples/ex3.jpg)">
-			  </div>
+				<div class="carousel-item active" style="background-image: url(static/dd_examples/ex1.jpeg);">
+				</div>
+				<div class="carousel-item" style="background-image: url(static/dd_examples/ex2.jpeg);">
+				</div>
+				<div class="carousel-item" style="background-image: url(static/dd_examples/ex3.jpg)">
+				</div>
 			</div>
 			<a href="#carouselExampleIndicators" class="carousel-control-prev" role="button" data-slide="prev">
 				<span class="sr-only">Previous</span>
@@ -30,72 +30,136 @@
 				<span class="sr-only">Next</span>
 				<span class="carousel-control-next-icon" aria-hidden="true">
 			</a>
-		  </div>
+		</div>
 	</div>
 
 	<!-- Problem to fix -->
-	<div class="container main-content text-justify"">
+	<div class="container main-content text-justify pt-5">
 
-		<p class="pt-5">
-			Traditionally, neural networks have performed well but it has been difficult to explain how they make their predictions. It was the case for image classification and this earned them the name of <a href="https://en.wikipedia.org/wiki/Black_box" target="_blank">black boxes</a>. For this reason in 2015, Software Engineers from Google found <a href="https://ai.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html" target="_blank">techniques</a> to understand what neural networks "see" in the images they process.
+		<p>
+			Have you ever wondered how neural networks work? Today is your lucky day as we will cover some of the basic
+			concepts behind this fascinating technology when applied to <strong>visual data</strong>.
+			Traditionally, neural networks have performed well but it has been difficult to explain how they make their
+			predictions. It was the case for image classification and this earned them the name of <a
+				href="https://en.wikipedia.org/wiki/Black_box" target="_blank">black boxes</a>. For this reason in 2015,
+			Software Engineers from Google worked on <a
+				href="https://ai.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html"
+				target="_blank">techniques</a> to understand what neural networks "see" in the images they process.
 		</p>
 		<br>
 		<p>
-		In order to understand the technique that Google researchers found, we first need to understand <strong>gradient descent</strong>.
+			In order to understand the technique that Google researchers implemented, we first need to understand the
+			opposite concept first, that is <strong>gradient descent</strong>.
 		</p>
 		<br>
 		<h2>What is gradient descent?</h1>
-		<br>
-		<p>
-			Gradient descent is an optimization algorithm used to find the values of <strong><em>parameters</em></strong> (coefficients) of a function (called the <strong><em>loss function</em></strong>) that minimizes a <strong><em>cost</em></strong> (error) associated with the function. 
-			It is commonly used in machine learning to adjust the parameters of a model in order to make accurate predictions.
-			
 			<br>
-			<br>
-			
-			 You can think of it this way, image you are standing at the top of a mountain and you want to find the lowest point (the "valley"). One way to do this would be to take a few steps in a random direction and then see which direction takes you closer to the valley. You would then continue in that direction until you reach the bottom. This is similar to how gradient descent works.
-			
-			In the case of a loss function, the mountain represents the space of possible values for the function's parameters. The loss function tells us how "steep" the mountain is at any given point, and the direction we should move in is given by the "gradient" (a fancy word for "slope"). By repeatedly taking steps in the direction of the gradient, we can eventually find the values of the parameters that minimize the loss function and therefore find the "valley" (the minimum point).
 			<p>
-			The size of the step is called the <strong><em>learning rate</em></strong>. Too little and it will take us a long time to reach the lowest point, too big and we might overstep (and fall from a cliff). We do this by calculating the slope of the cost function at each step and moving in the opposite direction. We continue this process until the cost function is minimized or we reach a predetermined stopping point.
+				Gradient descent is an optimization algorithm used to find the values of
+				<strong><em>parameters</em></strong> (coefficients) of a function (called the <strong><em>loss
+						function</em></strong>) that minimizes a <strong><em>cost</em></strong> (error) associated with
+				the function.
+				It is commonly used in machine learning to adjust the parameters of a model in order to make accurate
+				predictions.
+
+				You can think of it this way, image you are standing at the top of a mountain and you want to find the
+				lowest point (the "valley"). One way to do this would be to take a few steps in a random direction and
+				then see which direction takes you closer to the valley. You would then continue in that direction until
+				you reach the bottom. This is similar to how gradient descent works.
+
+				In the case of a loss function, the mountain represents the space of possible values for the function's
+				parameters. The loss function tells us how "steep" the mountain is at any given point, and the direction
+				we should move in is given by the "gradient" (a fancy word for "slope"). By repeatedly taking steps in
+				the direction of the gradient, we can eventually find the values of the parameters that minimize the
+				loss function and therefore find the "valley" (the minimum point).
 			</p>
-		</p>
-		<br>
-		<!-- Grad Descent Gif -->
-		<figure>
-			<img src="static/index-main-content/gradient-descent1.gif" class="mx-auto d-block" alt="Example of Gradient Descent.">
-			<figcaption class="pt-2" ><em>Example of Gradient Descent from Wikimedia Commons.</em></figcaption>
-		</figure>
-		<br>
-		<h2>Why should we care?</h2>
-		<p>
-		DeepDream is a computer vision program created by Google engineer Alexander Mordvintsev which uses a <a href="https://towardsai.net/p/deep-learning/convolutional-neural-networks-for-dummies" target="_blank">convolutional neural network (CNN)</a> and the technique of gradient descent to modify the pixels of an image in order to enhance the features that the CNN was trained to recognize.
-		</p>
-		<br>
-		<!-- Grad Descent Gif -->
-		<figure>
-			<img src="static/index-main-content/cnn.gif" class="mx-auto d-block" alt="Example of Convolutional Neural Network." width="700" height="350">
-			<figcaption class="pt-2" ><em>Visual representation of a Convolutional Neural Network.</em></figcaption>
-		</figure>
-		<br>
-		<p>
-		In order to understand how DeepDream works, it is helpful to have a basic understanding of how a CNN is trained and how gradient descent is used to optimize the model's parameters.
-		During training, a CNN is presented with a large number of labeled images and the goal is to adjust the model's parameters so that it can accurately predict the labels for new images. The model does this by minimizing a loss function that measures the difference between the predicted labels and the true labels.
-		<p>
-			If you are curious about how gradient descent works in detail you can read <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf" target="_blank"> Yan LeCun's explanation on the Backpropagation algorithm</a>, which gives insight also into some practical aspects of its implementation in code that we will not cover here.
-		</p>
-		
-		</p>
-		<h2>Gradient Ascent</h2>
-		<p>
-		In DeepDream, the optimization process is used in reverse. Rather than trying to minimize the loss function, the goal is to maximize the activation of a particular layer in the CNN by modifying the pixels in the input image. The gradients of the activations with respect to the input image are computed and used to update the pixels in a way that increases the activations. This process is repeated until the desired level of activation is reached, resulting in an image that is "enhanced" for the features that the CNN was trained to recognize.
-		</p>
-		<h2>Let's try it out!</h2>
-		
-		<form method="POST" class="text-center pt-5 pb-5">
-			<!-- ADD TRIPPY BACKGROUND IMAGE-->
-			<a href="{{ url_for('create') }}" class="decorated-button btn border" role="button">Create</a>
-		</form>
+			<p>
+				The size of the step is called the <strong><em>learning rate</em></strong>. Too little and it will take
+				us a long time to reach the lowest point, too big and we might overstep (and fall from a cliff). We do
+				this by calculating the slope of the cost function at each step and moving in the opposite direction. We
+				continue this process until the cost function is minimized or we reach a predetermined stopping point.
+			</p>
+			<br>
+			<!-- Grad Descent Gif -->
+			<figure>
+				<img src="static/index-main-content/gradient-descent1.gif" class="mx-auto d-block"
+					alt="Example of Gradient Descent.">
+				<figcaption class="pt-2"><em>Example of Gradient Descent from Wikimedia Commons.</em></figcaption>
+			</figure>
+			<br>
+			<p>
+				In conclusion, gradient descent is an essential optimization algorithm used in machine learning to find
+				the optimal values of parameters in a model. The algorithm works by iteratively adjusting the parameters
+				based on the gradient of the cost function, or the slope of the mountain representing the function's
+				parameters. The learning rate determines the step size, and careful consideration must be taken to
+				prevent overshooting or slow convergence. Through this process, gradient descent finds the minimum of
+				the loss function and produces accurate predictions.
+			</p>
+			<h2>Why should we care?</h2>
+			<p>
+				DeepDream is a computer vision program created by Google engineer Alexander Mordvintsev which uses a <a
+					href="https://towardsai.net/p/deep-learning/convolutional-neural-networks-for-dummies"
+					target="_blank">convolutional neural network (CNN)</a> and the technique of gradient descent to
+				modify the pixels of an image in order to enhance the features that the CNN was trained to recognize.
+			</p>
+			<br>
+			<!-- Grad Descent Gif -->
+			<figure>
+				<img src="static/index-main-content/cnn.gif" class="mx-auto d-block"
+					alt="Example of Convolutional Neural Network." width="700" height="350">
+				<figcaption class="pt-2"><em>Visual representation of a Convolutional Neural Network.</em></figcaption>
+			</figure>
+			<br>
+			<p>
+				In order to understand how DeepDream works, it is helpful to have a basic understanding of how a CNN is
+				trained and how gradient descent is used to optimize the model's parameters.
+				During training, a CNN is presented with a large number of labeled images and the goal is to adjust the
+				model's parameters so that it can accurately predict the labels for new images (see example above). The model does this by
+				minimizing a loss function that measures the difference between the predicted labels and the true
+				labels.
+			<p>
+				If you are curious about how gradient descent works in detail you can read <a
+					href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf" target="_blank"> Yann LeCun's explanation
+					on the Backpropagation algorithm</a>, which gives insight also into some practical aspects of its
+				implementation in code that we will not cover here.
+			</p>
+
+			</p>
+			<h2>Gradient Ascent</h2>
+			<p>
+				In DeepDream, the optimization process is used in reverse. Rather than trying to minimize the loss
+				function, the goal is to maximize the activation of a particular layer in the CNN by <strong>modifying the
+					pixels</strong> in the input image. The gradients of the activations with respect to the input image are
+				computed and used to update the pixels in a way that increases the activations. This process is repeated until
+				the desired level of activation is reached, resulting in an image that is "enhanced" for the features
+				that the CNN was trained to recognize. Train the neural network on different datasets and gradient ascent will
+				maximize different patterns on the input images.
+
+				The model is first trained to minimize the loss function, setting the weights for the neurons and the biases according
+				to the classes included in the dataset. 
+			</p>
+			<p>
+				After model training, we can maximize the activations in the layers we chose to use by applying gradient ascent. Below are a few examples of asking the neural network to maximize a specific class while giving it an image
+				full of random noise: 
+			</p>
+			<!-- Grad Ascent Figure -->
+			<figure>
+				<img src="static/index-main-content/gradient_ascent_examples.png" class="mx-auto d-block"
+					alt="Example of using gradient ascent to visualize different labels." width="700" height="430">
+				<figcaption class="pt-2"><em>Maximizing activations of different classes. From <a href="https://ai.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html" target="black">Inceptionism: Going Deeper into Neural Networks</a></em></figcaption>
+			</figure>
+			<p>
+				In our case we will not give images full of random noise as input. Instead we will upload our favorite images and see what the 
+				Deep Dream algorithm emphasizes on each one. In some it may enhance the edges in the picture, while in other ones it might find
+				make a human nose look like a dog nose. Every unique image will produce different results. 
+			</p>
+			<br>
+			<h2>Let's try it out!</h2>
+
+			<form method="POST" class="text-center pt-5 pb-5">
+				<!-- ADD TRIPPY BACKGROUND IMAGE-->
+				<a href="{{ url_for('create') }}" class="decorated-button btn border" role="button">Create</a>
+			</form>
 	</div>
 </main>
 {% endblock %}

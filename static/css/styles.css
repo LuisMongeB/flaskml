@@ -7,10 +7,13 @@ body {
     font-family: 'Inter', sans-serif !important;
     font-weight: 400 !important;
     background: rgb(253, 253, 253) !important;
-
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    line-height: 1.8 !important;
+    
+
+
 }
 
 .carousel-item {
