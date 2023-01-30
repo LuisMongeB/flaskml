@@ -1,13 +1,16 @@
 from db import db
 
-class Img(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.Text, unique=True, nullable=False)
-    name = db.Column(db.Text, nullable=False)
-    mimetype = db.Column(db.Text, nullable=False)
-
-
 class Upload(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(50), nullable=False)
-    data = db.Column(db.LargeBinary, nullable=False)
+    filename = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary)
+    mimetype = db.Column(db.String(20))
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+
+
+class Generate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary)
+    mimetype = db.Column(db.String(20))
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
