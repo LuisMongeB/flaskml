@@ -27,7 +27,7 @@ def load_image(img, target_shape=None):
     # need to change img_path to only accept np.array 
     # if not os.path.exists(img_path):
     #    raise Exception(f'Path does not exist: {img_path}')
-    # img = cv.imread(img_path)[:, :, ::-1]  # [:, :, ::-1] converts BGR (opencv format...) into RGB
+    # img = cv.imread(img_path)[:, :, ::-1]  # [:, :, ::-1] converts BGR (opencv format...) into RGB
 
     # from here leave the same
     if target_shape is not None:  # resize section
@@ -35,7 +35,7 @@ def load_image(img, target_shape=None):
             current_height, current_width = img.shape[:2]
             new_width = target_shape
             new_height = int(current_height * (new_width / current_width))
-            img = cv.resize(img, (new_width, new_height), interpolation=cv.INTER_CUBIC)
+            img = cv.resize(img, (new_width, new_height), interpolation=cv.INTER_LANCZOS4)
         else:  # set both dimensions to target shape
             img = cv.resize(img, (target_shape[1], target_shape[0]), interpolation=cv.INTER_CUBIC)
 
