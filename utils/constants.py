@@ -53,6 +53,23 @@ os.makedirs(OUT_IMAGES_PATH, exist_ok=True)
 # os.makedirs(OUT_VIDEOS_PATH, exist_ok=True)
 # os.makedirs(OUT_GIF_PATH, exist_ok=True)
 
-
-
-
+model_config = {'input': '', # {os.getcwd()}/static/{file_url}
+                'img_width': 300,
+                'layers_to_use': ['relu4_3'],
+                'model_name': 'VGG16_EXPERIMENTAL',
+                'pretrained_weights': 'IMAGENET',
+                'pyramid_size': 4,
+                'pyramid_ratio': 1.5,
+                'num_gradient_ascent_iterations': 3,
+                'lr': 0.09,
+                'create_ouroboros': False,
+                'ouroboros_length': 30,
+                'fps': 30,
+                'frame_transform': 'ZOOM_ROTATE',
+                'blend': 0.85,
+                'should_display': False,
+                'spatial_shift_size': 32,
+                'smoothing_coefficient': 0.8,
+                'use_noise': False,
+                'dump_dir': '',
+                'input_name': ''} 
