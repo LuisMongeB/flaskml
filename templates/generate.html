@@ -21,7 +21,7 @@
                             <img src="data:image/png;base64,{{ to_generate | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
                         </div>
                         <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post" class="mb-5">
-                            <input type="submit" name="submit-button" value="Generate" onclick="loading();">
+                            <input type="submit" name="submit-button" class="decorated-button" value="Generate" onclick="loading();">
                         </form>
                     </div>
                     {% elif generated %}
@@ -29,7 +29,7 @@
                             <img src="data:image/png;base64,{{ generated | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
                         </div>
                         <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post" class="mb-5">
-                            <input type="submit" name="download-button" for="dowload-button" value="Download">
+                            <input type="submit" name="download-button" for="dowload-button" value="Download" class="decorated-button">
                         </form>
 
                     {% else %}
