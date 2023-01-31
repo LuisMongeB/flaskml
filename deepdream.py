@@ -82,7 +82,7 @@ def deep_dream_static_image(config, img):
             shape = img.shape
             img = np.random.uniform(low=0.0, high=1.0, size=shape).astype(np.float32)
 
-    img = utils.pre_process_numpy_img(img)
+    # img = utils.pre_process_numpy_img(img)
     base_shape = img.shape[:-1]  # save initial height and width
 
     # Note: simply rescaling the whole result (and not only details, see original implementation) gave me better results
