@@ -22,22 +22,22 @@ import numpy as np
 os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '1'
 
 model_config = {'input': '',  # {os.getcwd()}/static/{file_url}
-                'img_width': 300,
+                'img_width': 600,
                 'layers_to_use': ['layer3'],
                 'model_name': 'RESNET50',
                 'pretrained_weights': 'PLACES_365',
                 'pyramid_size': 4,
                 'pyramid_ratio': 1.8,
                 'num_gradient_ascent_iterations': 10,
-                'lr': 0.09,
+                'lr': 0.05,
                 'create_ouroboros': False,
                 'ouroboros_length': 30,
                 'fps': 30,
                 'frame_transform': 'ZOOM_ROTATE',
-                'blend': 0.85,
+                'blend': 0.5,
                 'should_display': False,
                 'spatial_shift_size': 32,
-                'smoothing_coefficient': 0.5,
+                'smoothing_coefficient': 0.7,
                 'use_noise': False,
                 'dump_dir': '',
                 'input_name': ''}  # os.path.basename(config['input'])  # handle absolute and relative paths
@@ -121,15 +121,16 @@ def to_generate(upload_id):
     if request.method == 'POST':
         # Query db
         image = Upload.query.filter_by(id=upload_id).first()
-        if Generate.query.filter_by(filename=image.filename).first():
-            image = Generate.query.filter_by(filename=image.filename).first()
-            decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
-            out_mimetype = f".{image.mimetype.split('/')[1]}"
-            img_str = cv2.imencode(out_mimetype, decoded)[1].tostring()
-            base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
+        
+        # if Generate.query.filter_by(filename=image.filename).first():
+        #   image = Generate.query.filter_by(filename=image.filename).first()
+        #   decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
+        #   out_mimetype = f".{image.mimetype.split('/')[1]}"
+        #   img_str = cv2.imencode(out_mimetype, decoded)[1].tostring()
+        #   base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
 
-            return render_template('generate.html', to_generate=False, upload_id=upload_id, generated=base64_encoded_image)
-
+        #    return render_template('generate.html', to_generate=False, upload_id=upload_id, generated=base64_encoded_image)
+        
         # Decode image for processing
         decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
         cv2.imwrite('decoded.jpg', decoded)
