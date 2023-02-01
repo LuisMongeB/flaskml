@@ -15,39 +15,15 @@ from models.definitions.resnets import ResNet50
 from deepdream import gradient_ascent, deep_dream_static_image
 from utils.constants import *
 from utils.utils import *
+from db_models.db_models import db, Upload, Generate
 
 import cv2
 import numpy as np
 
 os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '1'
 
-model_config = {'input': '',  # {os.getcwd()}/static/{file_url}
-                'img_width': 300,
-                'layers_to_use': ['layer3'],
-                'model_name': 'RESNET50',
-                'pretrained_weights': 'PLACES_365',
-                'pyramid_size': 4,
-                'pyramid_ratio': 1.8,
-                'num_gradient_ascent_iterations': 10,
-                'lr': 0.09,
-                'create_ouroboros': False,
-                'ouroboros_length': 30,
-                'fps': 30,
-                'frame_transform': 'ZOOM_ROTATE',
-                'blend': 0.85,
-                'should_display': False,
-                'spatial_shift_size': 32,
-                'smoothing_coefficient': 0.5,
-                'use_noise': False,
-                'dump_dir': '',
-                'input_name': ''}  # os.path.basename(config['input'])  # handle absolute and relative paths
-
-# At this point of the project I won't be using a db for two reasons:
-# first, I won't be saving the images that users send as a matter of respect to privacy
-# and second, I will implement the registration in another moment
-# the db will be added then.
 # This project will focus on how to use a deep learning model such as Deep Dream
-# to interact with users that will be able to transform their images into psychedelic ones.
+# to interact with users that will be able to transform their images into dreamy looking ones.
 
 # Creating instance of the class
 app = Flask(__name__)
@@ -56,29 +32,14 @@ app.config['SECRET_KEY'] = '592716490af3ccea41cbc1e68e1fc7e3d6f0656d3990af9f'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
+db.init_app(app)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-class Upload(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(50))
-    data = db.Column(db.LargeBinary)
-    mimetype = db.Column(db.String(20))
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-
-
-class Generate(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(50))
-    data = db.Column(db.LargeBinary)
-    mimetype = db.Column(db.String(20))
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
 
 
 #to tell flask what url shoud trigger the function index()
