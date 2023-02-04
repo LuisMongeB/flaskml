@@ -55,8 +55,8 @@ os.makedirs(OUT_IMAGES_PATH, exist_ok=True)
 
 model_config = {'input': '', # {os.getcwd()}/static/{file_url}
                 'img_width': 300,
-                'layers_to_use': ['layer4'],
-                'model_name': 'RESNET50',
+                'layers_to_use': ['relu3_3'],
+                'model_name': 'VGG16_EXPERIMENTAL',
                 'pretrained_weights': 'IMAGENET',
                 'pyramid_size': 5,
                 'pyramid_ratio': 1.5,

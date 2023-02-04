@@ -23,6 +23,12 @@
                         <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post" class="mb-5">
                         <div class="form-group">
                             
+                            <label for="model-select">Pyramid size</label>
+                            <select name="model" id="model-select">
+                                <option selected value="VGG16_EXPERIMENTAL">VGG</option>
+                                <option value="RESNET50">RESNET50</option>
+                            </select>
+
                             <label for="pyramid-size-select">Pyramid size</label>
                             <select name="pyramid_size" id="pyramid-size-select">
                                 <option selected value="1">1</option>
@@ -37,6 +43,7 @@
                                     <option value="layer2">2</option>
                                     <option value="layer3">3</option>
                                     <option value="layer4">4</option>
+                                    <option value="relu3_3">relu3_3</option>
                                 </select>
                             
                             

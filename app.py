@@ -90,6 +90,7 @@ def to_generate(upload_id):
         # This will later be setup with user input coming from a form
         user_model_config = model_config.copy()
         # User choices 
+        user_model_config['model_name'] = request.form['model']
         user_model_config['layers_to_use'] = [request.form['layers']]
         user_model_config['num_gradient_ascent_iterations'] = int(request.form['iterations'])
         user_model_config['pyramid_size'] = int(request.form['pyramid_size'])
