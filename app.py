@@ -63,12 +63,13 @@ def create():
 
         filename = secure_filename(file.filename)
         # If file already exists do not commit uploaded file, just extract its id and redirect
-        if Upload.query.filter_by(filename=file.filename).first():
-            image = Upload.query.filter_by(filename=file.filename).first()
+        if Upload.query.filter_by(filename=filename).first():
+            image = Upload.query.filter_by(filename=filename).first()
             return redirect(url_for('to_generate', upload_id=image.id))
 
-        upload = Upload(filename=file.filename,
-                        data=file.read(), mimetype=file.mimetype)
+        upload = Upload(filename=filename,
+                        data=file.read(),
+                        mimetype=file.mimetype)
         db.session.add(upload)
         db.session.commit()
 
@@ -82,23 +83,16 @@ def to_generate(upload_id):
     if request.method == 'POST':
         # Query db
         image = Upload.query.filter_by(id=upload_id).first()
-        
-        # if Generate.query.filter_by(filename=image.filename).first():
-        #   image = Generate.query.filter_by(filename=image.filename).first()
-        #   decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
-        #   out_mimetype = f".{image.mimetype.split('/')[1]}"
-        #   img_str = cv2.imencode(out_mimetype, decoded)[1].tostring()
-        #   base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
-
-        #    return render_template('generate.html', to_generate=False, upload_id=upload_id, generated=base64_encoded_image)
-        
+        print(request.form)
         # Decode image for processing
         decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
-        cv2.imwrite('decoded.jpg', decoded)
-        ##### Processing ### 
-        # This will later be setup with user input
+
+        # This will later be setup with user input coming from a form
         user_model_config = model_config.copy()
-        
+        # User choices 
+        user_model_config['layers_to_use'] = [request.form['layers']]
+        user_model_config['num_gradient_ascent_iterations'] = int(request.form['iterations'])
+        user_model_config['pyramid_size'] = int(request.form['pyramid_size'])
         # Instead of dump_dir we will save it in the generate db
         # Fill in input and input name keys
         user_model_config['input'] = ''
@@ -114,10 +108,12 @@ def to_generate(upload_id):
         out_mimetype = f".{image.mimetype.split('/')[1]}"
         img_str = cv2.imencode(out_mimetype, out_image)[1].tostring()
         base64_encoded_image = base64.b64encode(img_str).decode("utf-8")
-
+        filename = secure_filename(image.filename)
         # Save to generate table
-        generated = Generate(filename=image.filename,
-                             data=img_str, mimetype=image.mimetype)
+        generated = Generate(filename=filename,
+                             data=img_str,
+                             mimetype=image.mimetype,
+                             upload_id=upload_id)
         db.session.add(generated)
         db.session.commit()
 
@@ -127,7 +123,7 @@ def to_generate(upload_id):
         # return response
 
         # Return generated image with button to save
-        return render_template('generate.html', to_generate=False, upload_id=image.id, generated=base64_encoded_image)
+        return render_template('generate.html', to_generate=False, upload_id=image.id, generated=base64_encoded_image, generate_id=generated.id)
     else:
         upload = Upload.query.filter_by(id=upload_id).first()
         # decode image data
@@ -135,6 +131,11 @@ def to_generate(upload_id):
 
         return render_template('generate.html', to_generate=base64_encoded_image, upload_id=upload_id, generated=False)
 
+@app.route('/download/<int:generate_id>', methods=['POST', 'GET'])
+def download(generate_id):
+        generated =  Generate.query.filter_by(id=generate_id).first()
+        return send_file(BytesIO(generated.data), mimetype='image/png', as_attachment=True, download_name=f"generated_{generated.filename}")
+        
 
 @app.route('/about')
 def about():
