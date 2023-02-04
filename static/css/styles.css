@@ -12,7 +12,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     line-height: 1.8 !important;
-    animation: fadeInAnimation ease 2s;
+    animation: fadeInAnimation ease 1.2s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
@@ -161,3 +161,9 @@ div#loading {
     background: url(/static/loadingimage.gif) no-repeat;
     cursor: wait;
 }
+
+
+div.form-group {
+    font-weight: 500;
+}
+
