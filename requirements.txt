@@ -1,7 +1,6 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: osx-arm64
-_ipython_minor_entry_point=8.7.0=h8cf3c4a_0
 anyio=3.6.2=pyhd8ed1ab_0
 aom=3.5.0=h7ea286d_0
 appnope=0.1.3=pyhd8ed1ab_0
