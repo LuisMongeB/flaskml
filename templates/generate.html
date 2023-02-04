@@ -8,7 +8,7 @@
 {% block content %}
 
     <div class="row">
-        <div class="col-6 mx-auto mt-5 text-center">
+        <div class="col-8 mx-auto mt-5 text-center">
 
             <h1 class="mb-2">Dreamify Your Image</h1>
 
@@ -21,31 +21,35 @@
                             <img src="data:image/png;base64,{{ to_generate | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
                         </div>
                         <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post" class="mb-5">
-                            <label for="pyramid-size-select">Pyramid size:</label>
+                        <div class="form-group">
+                            
+                            <label for="pyramid-size-select">Pyramid size</label>
                             <select name="pyramid_size" id="pyramid-size-select">
-                                <option value="1">1</option>
+                                <option selected value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
-                            </select>
-
-                            <label for="layers-select">Layer:</label>
-                            <select name="layers" id="layers-select">
-                                <option value="layer1">layer1</option>
-                                <option value="layer2">layer2</option>
-                                <option value="layer3">layer3</option>
-                                <option value="layer4">layer4</option>
                             </select>
                             
-                            <label for="iterations-select">Iterations:</label>
-                            <select name="iterations" id="iterations-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-
+                                <label for="layers-select">Layer</label>
+                                <select name="layers" id="layers-select">
+                                    <option selected value="layer1">1</option>
+                                    <option value="layer2">2</option>
+                                    <option value="layer3">3</option>
+                                    <option value="layer4">4</option>
+                                </select>
+                            
+                            
+                            <label for="iterations-select">Iterations</label>
+                                <select name="iterations" class="form-select" id="iterations-select">
+                                    <option selected value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <br>
                             <input type="submit" name="submit-button" class="decorated-button" value="Generate" onclick="loading();">
                         </form>
                     </div>
@@ -53,15 +57,9 @@
                         <div class="mt-3">
                             <img src="data:image/png;base64,{{ generated | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
                         </div>
-                        <form class="mb-5">
-                            <a src="{{ url_for('download', generate_id=generate_id) }}">
-                                <!--  <input type="submit" name="download-button" value="{{ generate_id }}" class="decorated-button"> -->
-                                <button>Download Image</button>    
-                            </a>
-                        </form>
-                        
-                        <button>Download Image</button>
-                          
+                        <form action="{{ url_for('download', generate_id=generate_id) }}" method="post" class="mb-5">
+                            <input type="submit" name="download-button" class="decorated-button" value="Download image">
+                        </form>                          
 
                     {% else %}
                         <h1 class="center">No image found.</h1>
