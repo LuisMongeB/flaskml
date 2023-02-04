@@ -1,4 +1,4 @@
--f https://download.pytorch.org/whl/cpu
+--find-links https://download.pytorch.org/whl/cpu
 Flask==2.2.2
 flask_sqlalchemy==3.0.3
 imageio==2.9.0
