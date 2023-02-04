@@ -6,6 +6,8 @@ matplotlib==3.6.2
 numpy==1.24.0
 opencv_python==4.6.0.66
 scipy==1.10.0
+--find-links https://download.pytorch.org/whl/cpu
 torch==1.13.1
+--find-links https://download.pytorch.org/whl/cpu
 torchvision==0.14.1
 Werkzeug==2.2.2
