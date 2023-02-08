@@ -4,10 +4,10 @@ flask_sqlalchemy==3.0.3
 imageio==2.9.0
 matplotlib==3.6.2
 numpy==1.24.0
-opencv_python==4.6.0.66
+opencv_python_headless==4.6.0.66
 scipy==1.10.0
-torch==1.13.1+cpu
-torchvision==0.14.1+cpu
+torch==1.13.1
+torchvision==0.14.1
 Werkzeug==2.2.2
 python-dotenv==0.21.1
 gunicorn==20.1.0
