@@ -103,7 +103,7 @@ input#submit.btn {
 }
 
 h1.mb-2 {
-    font-size: 3em !important;
+    font-size: 4em !important;
     background-image: url(/static/logo.png);
     background-repeat: repeat;
     color: transparent;
@@ -126,6 +126,8 @@ input#file-upload-button {
 img.displayed-image {
     border: 5px solid rgba(0, 0, 0, 0.8) !important;
     align-items: center !important;
+    max-width: 100%;
+    height: auto;
 }
 
 .decorated-button, a.decorated-button.btn {

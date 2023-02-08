@@ -11,9 +11,8 @@
         <div class="col-8 mx-auto mt-5 text-center">
 
             <h1 class="mb-2">Dreamify Your Image</h1>
-
-            <div class="row justify-content-center">
-                <div ckass="col-auto">
+            <div class="row justify-content-center">   
+                <div class="col-sm-2 col-md-8">
                     <div id="loading"></div>
                     <div id="content">
                     {% if to_generate %}
@@ -22,7 +21,7 @@
                         </div>
                         <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post" class="mb-5">
                         <div class="form-group">
-                            
+                    
                             <label for="model-select">Pyramid size</label>
                             <select name="model" id="model-select">
                                 <option selected value="VGG16_EXPERIMENTAL">VGG</option>
