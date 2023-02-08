@@ -36,5 +36,5 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 Contributions, issues, and feature requests are welcome!
 Give a ⭐️ if you like this project!
 
-[@LuisMongeB](https://github.com/LuisMongeB) on Github
-[@luis-diego-monge-bolanos](https://www.linkedin.com/in/luis-diego-monge-bolanos/) on LinkedIn
+<p>[@LuisMongeB](https://github.com/LuisMongeB) on Github.</p>
+<p>[@luis-diego-monge-bolanos](https://www.linkedin.com/in/luis-diego-monge-bolanos/) on LinkedIn.</p>
