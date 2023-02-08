@@ -19,7 +19,7 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 1. Open Anaconda Prompt and navigate into project directory `cd path_to_repo`
 2a.Run `conda env create -f environment.yml` from project directory (this will create a brand new conda environment).
 2b.Create your own environment using Python version 3.9.15 and run `pip install -r requirements.txt`
-3. Activate your environment with `conda activate flaskml' or `conda activate YOUR_ENV_NAME' if you chose to create your own environment. 
+3. Activate your environment with `conda activate flaskml` or `conda activate YOUR_ENV_NAME` if you chose to create your own environment. 
 
 ## Built with
 - Python 3.9.15
