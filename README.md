@@ -13,3 +13,10 @@ Deep Dream is a computer vision algorithm that generates highly abstract and dre
 The application was built to utilize pre-trained deep learning models for the Deep Dream algorithm, implemented by <a href="https://github.com/gordicaleksa/pytorch-deepdream">Aleksa Gordic</a>. The user interface was designed for simplicity and ease of use, allowing users to quickly upload images and view the dreamified results.
 
 It is not anywhere near perfect but I am working (and learning) to improve it while balancing the daily responsibilities I have. 
+
+## Setup
+1. `git clone https://github.com/LuisMongeB/flaskml.git`
+1. Open Anaconda Prompt and navigate into project directory `cd path_to_repo`
+2a.Run `conda env create -f environment.yml` from project directory (this will create a brand new conda environment).
+2b.Create your own environment using Python version 3.9.15 and run `pip install -r requirements.txt`
+3. Activate your environment with `conda activate flaskml' or `conda activate YOUR_ENV_NAME' if you chose to create your own environment. 
