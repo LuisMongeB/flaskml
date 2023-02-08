@@ -4,7 +4,7 @@
 
 ## Project Description
 
-FlaskML is a web application that leverages the Flask framework and the Deep Dream algorithm to provide an interactive and user-friendly experience for exploring the concept of neural network-based image generation.  The application allows users to upload their own images and generate dream-like versions of them using the Deep Dream algorithm.
+FlaskML is a web application that leverages the Flask framework and the Deep Dream algorithm to provide an interactive and user-friendly experience for exploring the concept of neural network-based image generation. The application allows users to upload their own images and generate dream-like versions of them using the Deep Dream algorithm. :art: :milky_way:
 It also provides a brief explanation of the concepts behind Deep Dream, including the concept of activation maximization through Gradient Ascent.
 
 Deep Dream is a computer vision algorithm that generates highly abstract and dream-like images by amplifying the activations of the neurons in a deep convolutional neural network trained on image classification tasks. For a more detailed explanation visit the original Deep Dream <a href="https://ai.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html">blogpost</a>.
@@ -36,7 +36,6 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 Contributions, issues, and feature requests are welcome!
 Give a ⭐️ if you like this project!
 
-<p><strong>Github.</strong></p>
-[@LuisMongeB](https://github.com/LuisMongeB)
-<p><strong>LinkedIn</strong></p>
-[@luis-diego-monge-bolanos](https://www.linkedin.com/in/luis-diego-monge-bolanos/)
+## Let's Connect
+* On [Github](https://github.com/LuisMongeB) :star:
+* On [Linkedin](https://www.linkedin.com/in/luis-diego-monge-bolanos/) :bulb:
