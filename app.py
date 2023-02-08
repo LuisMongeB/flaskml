@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 
 # Models
 from models.definitions.resnets import ResNet50
-from deepdream import gradient_ascent, deep_dream_static_image
+from deepdream import deep_dream_static_image
 from utils.constants import *
 from utils.utils import *
 from db_models.db_models import db, Upload, Generate
@@ -27,9 +27,10 @@ os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '1'
 
 # Creating instance of the class
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '592716490af3ccea41cbc1e68e1fc7e3d6f0656d3990af9f'
+# app.config['SECRET_KEY'] = '592716490af3ccea41cbc1e68e1fc7e3d6f0656d3990af9f'
 # SQLAlchemy config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # db = SQLAlchemy(app)
@@ -118,10 +119,8 @@ def to_generate(upload_id):
         db.session.add(generated)
         db.session.commit()
 
-        # response = current_app.make_response(img_encoded.tobytes())
-        # response.headers.set('Content-Type', 'test/jpg')
-        # response.headers.set('Content-Disposition', 'attachment', filename='image.jpg')
-        # return response
+        # resize image to be displayed
+
 
         # Return generated image with button to save
         return render_template('generate.html', to_generate=False, upload_id=image.id, generated=base64_encoded_image, generate_id=generated.id)
@@ -137,7 +136,7 @@ def download(generate_id):
         generated =  Generate.query.filter_by(id=generate_id).first()
         return send_file(BytesIO(generated.data), mimetype='image/png', as_attachment=True, download_name=f"generated_{generated.filename}")
         
-
+#TODO: add contact information
 @app.route('/about')
 def about():
     return render_template('about.html')
