@@ -1,90 +1,90 @@
 {% extends 'base.html' %}
 <script type="text/javascript">// <![CDATA[
-    function loading(){
+    function loading() {
         $("#loading").show();
-        $("#content").hide();       
+        $("#content").hide();
     }
 // ]]></script>
 {% block content %}
 
-    <div class="row">
-        <div class="col-8 mx-auto mt-5 text-center">
+<div class="row">
+    <div class="col-8 mx-auto mt-5 text-center">
 
-            <h1 class="mb-2">Dreamify Your Image</h1>
-            <div class="row justify-content-center">   
-                <div class="col-sm-2 col-md-8">
-                    <div id="loading"></div>
-                    <div id="content">
+        <h1 class="mb-2">Dreamify Your Image</h1>
+        <div class="row justify-content-center">
+            <div class="col-sm-2 col-md-8">
+                <div id="loading"></div>
+                <div id="content">
                     {% if to_generate %}
-                        <div class="mt-3">
-                            <img src="data:image/png;base64,{{ to_generate | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
-                        </div>
-                        <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post" class="mb-5">
+                    <div class="mt-3">
+                        <img src="data:image/png;base64,{{ to_generate | safe }}" class="mb-5 mt-5 displayed-image"
+                            style="width:600px;">
+                    </div>
+                    <form action="{{ url_for('to_generate', upload_id=upload_id) }}" method="post" class="mb-5">
                         <div class="form-group">
-                    
-                            <label for="model-select">Pyramid size</label>
-                            <select name="model" id="model-select">
-                                <!--
-                                    <option value="VGG16_EXPERIMENTAL">VGG</option>
-                                 -->
-                                
-                                <option selected value="RESNET50">RESNET50</option>
+                            <select name="model" id="model-select" class="custom-select text-center">
+                                <option selected value="">Model</option>
+                                <option value="RESNET50">RESNET50</option>
+                                <option value="VGG16_EXPERIMENTAL">VGG</option>
                             </select>
-
-                            <label for="pyramid-size-select">Pyramid size</label>
-                            <select name="pyramid_size" id="pyramid-size-select">
-                                <option selected value="1">1</option>
+                        </div>
+                        <div class="form-group">
+                            <select name="pyramid_size" id="pyramid-size-select" class="custom-select text-center">
+                                <option selected value="">Pyramid Size</option>
+                                <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            
-                                <label for="layers-select">Layer</label>
-                                <select name="layers" id="layers-select">
-                                    <option selected value="layer1">1</option>
-                                    <option value="layer2">2</option>
-                                    <option value="layer3">3</option>
-                                    <option value="layer4">4</option>
-                                    <!-- 
-                                        <option value="relu3_3">relu3_3</option>
-                                    -->
-                                    
-                                </select>
-                            
-                            
-                            <label for="iterations-select">Iterations</label>
-                                <select name="iterations" class="form-select" id="iterations-select">
-                                    <option selected value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            <br>
-                            <input type="submit" name="submit-button" class="decorated-button" value="Generate" onclick="loading();">
-                        </form>
-                    </div>
-                    {% elif generated %}
-                        <div class="mt-3">
-                            <img src="data:image/png;base64,{{ generated | safe }}" class="mb-5 mt-5 displayed-image" style="width:600px;">
                         </div>
-                        <form action="{{ url_for('download', generate_id=generate_id) }}" method="post" class="mb-5">
-                            <input type="submit" name="download-button" class="decorated-button" value="Download image">
-                        </form>                          
+                        <div class="form-group">
+                            <select name="layers" id="layers-select" class="custom-select text-center">
+                                <option selected value="">Layers</option>
+                                <option value="layer1">1 (Resnet50 only)</option>
+                                <option value="layer2">2 (Resnet50 only)</option>
+                                <option value="layer3">3 (Resnet50 only)</option>
+                                <option value="layer4">4 (Resnet50 only)</option>
+                                <option value="relu3_3">relu3_3 (VGG only)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select name="iterations" id="iterations-select" class="custom-select text-center">
+                                <option selected value="">Iterations</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
 
-                    {% else %}
-                        <h1 class="center">No image found.</h1>
-                    {% endif %}
-                    <!-- Insert Generate Button -->
-                    <!-- Insert model parameters -->
+                        <br>
+                        <input type="submit" name="submit-button" class="decorated-button" value="Generate"
+                            onclick="loading();">
+                    </form>
                 </div>
-            </div>
-            </form>
+                {% elif generated %}
+                <div class="mt-3">
+                    <img src="data:image/png;base64,{{ generated | safe }}" class="mb-5 mt-5 displayed-image"
+                        style="width:600px;">
+                </div>
+                <form action="{{ url_for('download', generate_id=generate_id) }}" method="post" class="mb-5">
+                    <input type="submit" name="download-button" class="decorated-button" value="Download image">
+                </form>
 
+                {% else %}
+                <h1 class="center">No image found.</h1>
+                {% endif %}
             </div>
         </div>
+        </form>
+
     </div>
+</div>
+</div>
 
 </div>
 {% endblock %}
+<script>
+
+</script>
