@@ -82,7 +82,7 @@
 			<br>
 			<!-- Grad Descent Gif -->
 			<figure>
-				<img src="static/index-main-content/gradient-descent1.gif" class="mx-auto d-block"
+				<img src="static/index-main-content/gradient-descent1.gif" class="mx-auto d-block displayed-image"
 					alt="Example of Gradient Descent.">
 				<figcaption class="pt-2"><em>Example of Gradient Descent from Wikimedia Commons.</em></figcaption>
 			</figure>
@@ -105,7 +105,7 @@
 			<br>
 			<!-- Grad Descent Gif -->
 			<figure>
-				<img src="static/index-main-content/cnn.gif" class="mx-auto d-block"
+				<img src="static/index-main-content/cnn.gif" class="mx-auto d-block displayed-image"
 					alt="Example of Convolutional Neural Network." width="700" height="350">
 				<figcaption class="pt-2"><em>Visual representation of a Convolutional Neural Network.</em></figcaption>
 			</figure>
@@ -114,7 +114,8 @@
 				In order to understand how DeepDream works, it is helpful to have a basic understanding of how a CNN is
 				trained and how gradient descent is used to optimize the model's parameters.
 				During training, a CNN is presented with a large number of labeled images and the goal is to adjust the
-				model's parameters so that it can accurately predict the labels for new images (see example above). The model does this by
+				model's parameters so that it can accurately predict the labels for new images (see example above). The
+				model does this by
 				minimizing a loss function that measures the difference between the predicted labels and the true
 				labels.
 			<p>
@@ -128,30 +129,41 @@
 			<h2>Gradient Ascent</h2>
 			<p>
 				In DeepDream, the optimization process is used in reverse. Rather than trying to minimize the loss
-				function, the goal is to maximize the activation of a particular layer in the CNN by <strong>modifying the
-					pixels</strong> in the input image. The gradients of the activations with respect to the input image are
-				computed and used to update the pixels in a way that increases the activations. This process is repeated until
+				function, the goal is to maximize the activation of a particular layer in the CNN by <strong>modifying
+					the
+					pixels</strong> in the input image. The gradients of the activations with respect to the input image
+				are
+				computed and used to update the pixels in a way that increases the activations. This process is repeated
+				until
 				the desired level of activation is reached, resulting in an image that is "enhanced" for the features
-				that the CNN was trained to recognize. Train the neural network on different datasets and gradient ascent will
+				that the CNN was trained to recognize. Train the neural network on different datasets and gradient
+				ascent will
 				maximize different patterns on the input images.
 
-				The model is first trained to minimize the loss function, setting the weights for the neurons and the biases according
-				to the classes included in the dataset. 
+				The model is first trained to minimize the loss function, setting the weights for the neurons and the
+				biases according
+				to the classes included in the dataset.
 			</p>
 			<p>
-				After model training, we can maximize the activations in the layers we chose to use by applying gradient ascent. Below are a few examples of asking the neural network to maximize a specific class while giving it an image
-				full of random noise: 
+				After model training, we can maximize the activations in the layers we chose to use by applying gradient
+				ascent. Below are a few examples of asking the neural network to maximize a specific class while giving
+				it an image
+				full of random noise:
 			</p>
 			<!-- Grad Ascent Figure -->
 			<figure>
-				<img src="static/index-main-content/gradient_ascent_examples.png" class="mx-auto d-block"
+				<img src="static/index-main-content/gradient_ascent_examples.png" class="mx-auto d-block displayed-image"
 					alt="Example of using gradient ascent to visualize different labels." width="700" height="430">
-				<figcaption class="pt-2"><em>Maximizing activations of different classes. From <a href="https://ai.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html" target="black">Inceptionism: Going Deeper into Neural Networks</a></em></figcaption>
+				<figcaption class="pt-2"><em>Maximizing activations of different classes. From <a
+							href="https://ai.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html"
+							target="black">Inceptionism: Going Deeper into Neural Networks</a></em></figcaption>
 			</figure>
 			<p>
-				In our case we will not give images full of random noise as input. Instead we will upload our favorite images and see what the 
-				Deep Dream algorithm emphasizes on each one. In some it may enhance the edges in the picture, while in other ones it might find
-				make a human nose look like a dog nose. Every unique image will produce different results. 
+				In our case we will not give images full of random noise as input. Instead we will upload our favorite
+				images and see what the
+				Deep Dream algorithm emphasizes on each one. In some it may enhance the edges in the picture, while in
+				other ones it might find
+				make a human nose look like a dog nose. Every unique image will produce different results.
 			</p>
 			<br>
 			<h2>Let's try it out!</h2>
