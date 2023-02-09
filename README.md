@@ -29,6 +29,7 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 
 ## Future Updates
 - [] Migration to more scalable database // this is pending
+- [] Compatibility issues with Windows
 - [] Deployment on cloud services (AWS or Azure) // this is pending 
 
 ## Contribution
