@@ -84,11 +84,11 @@ def to_generate(upload_id):
     if request.method == 'POST':
         # Query db
         image = Upload.query.filter_by(id=upload_id).first()
-        print(request.form)
+
         # Decode image for processing
         decoded = cv2.imdecode(np.frombuffer(image.data, np.uint8), -1)
 
-        # This will later be setup with user input coming from a form
+        # Copy original parameters
         user_model_config = model_config.copy()
         # User choices 
         user_model_config['model_name'] = request.form['model']
