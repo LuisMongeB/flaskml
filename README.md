@@ -17,16 +17,15 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 ## Setup
 1. `git clone https://github.com/LuisMongeB/flaskml.git`
 1. Open Anaconda Prompt and navigate into project directory `cd path_to_repo`
-2a.Run `conda env create -f environment.yml` from project directory (this will create a brand new conda environment).
-2b.Create your own environment using Python version 3.9.15 and run `pip install -r requirements.txt`
+2. Create your own environment using Python version 3.9.15 like this `conda create --name flaskml python=3.9.15` and run `pip install -r requirementstxt`
 3. Activate your environment with `conda activate flaskml` or `conda activate YOUR_ENV_NAME` if you chose to create your own environment. 
 
 ## Built with
 - Python 3.9.15
-- PyTorch 1.13.1+cpu (CPU only version to reduce size of image to be deployed to Heroku)
-- Torchvision 0.14.1+cpu
+- PyTorch 1.13.1
+- Torchvision 0.14.1
 - Flask (with Bootstrap and Jinja2 templating)
-- Sqlite3 (with SQLAlchemy)
+- Sqlite3 (with SQLAlchemy) and DB Browswer for SQLite
 
 ## Future Updates
 - [] Migration to more scalable database // this is pending
