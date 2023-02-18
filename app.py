@@ -60,6 +60,7 @@ def create():
             flash('No image selected for uploading')
             return redirect(request.url)
         if file and not allowed_file(file.filename):
+            #TODO: return error template with message
             return f"<h1 style='display: flex;justify-content:center;align-items:center;height:100vh;'>Error: Format {file.mimetype} invalid.</h1>"
 
         filename = secure_filename(file.filename)
