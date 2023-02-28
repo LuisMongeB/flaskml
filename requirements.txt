@@ -10,4 +10,3 @@ torch==1.13.1
 torchvision==0.14.1
 Werkzeug==2.2.2
 python-dotenv==0.21.1
-gunicorn==20.1.0
