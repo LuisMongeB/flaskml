@@ -18,7 +18,7 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 1. `git clone https://github.com/LuisMongeB/flaskml.git`
 1. Open Anaconda Prompt and navigate into project directory `cd path_to_repo`
 2. Create your own environment using Python version 3.9.15 like this `conda create --name flaskml python=3.9.15` and run `pip install -r requirementstxt`
-3. Activate your environment with `conda activate flaskml` or `conda activate YOUR_ENV_NAME` if you chose to create your own environment. 
+3. Activate your environment `conda activate YOUR_ENV_NAME` after creating your own environment. 
 
 ## Built with
 - Python 3.9.15
