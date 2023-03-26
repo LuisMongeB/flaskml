@@ -3,45 +3,91 @@ from io import BytesIO
 import base64
 from datetime import datetime
 import os
-import pickle
 
 # Flask
-from flask import Flask, flash, request, redirect, url_for, render_template, send_file, current_app
+from flask import Flask, flash, request, redirect, url_for, render_template, send_file, session
+from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash, generate_password_hash
+
 
 # Models
 from models.definitions.resnets import ResNet50
 from deepdream import deep_dream_static_image
 from utils.constants import *
 from utils.utils import *
-from db_models.db_models import db, Upload, Generate
+from utils.flask_utils import login_required, apology
+from db_models.db_models import db, Upload, Generate, Users
+from flask_migrate import Migrate
+
 
 import cv2
 import numpy as np
 
-os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '1'
 
-# This project will focus on how to use a deep learning model such as Deep Dream
+# This project will focus on how to do inference on a deep learning model such as Deep Dream
 # to interact with users that will be able to transform their images into dreamy looking ones.
 
 # Creating instance of the class
 app = Flask(__name__)
+
 # app.config['SECRET_KEY'] = '592716490af3ccea41cbc1e68e1fc7e3d6f0656d3990af9f'
 # SQLAlchemy config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
+
 # db = SQLAlchemy(app)
 db.init_app(app)
+migrate = Migrate(app, db)
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log user in"""
+
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            flash("Provide a username")
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+
+        # Query database for username
+        
+        rows = Users.query.filter_by(username=request.form.get("username")).all()
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return redirect("/")
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("login.html")
 
 #to tell flask what url shoud trigger the function index()
 @app.route('/', methods=['GET', 'POST'])
@@ -52,6 +98,7 @@ def index():
         return render_template("index.html")
 
 @app.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
     if request.method == 'POST':
         file = request.files['file']
@@ -81,6 +128,7 @@ def create():
 
 
 @app.route('/generate/<int:upload_id>', methods=['POST', 'GET'])
+@login_required
 def to_generate(upload_id):
     if request.method == 'POST':
         # Query db
@@ -133,10 +181,59 @@ def to_generate(upload_id):
         return render_template('generate.html', to_generate=base64_encoded_image, upload_id=upload_id, generated=False)
 
 @app.route('/download/<int:generate_id>', methods=['POST', 'GET'])
+@login_required
 def download(generate_id):
         generated =  Generate.query.filter_by(id=generate_id).first()
         return send_file(BytesIO(generated.data), mimetype='image/png', as_attachment=True, download_name=f"generated_{generated.filename}")
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """Register user"""
+    if request.method == "POST":
+
+        username = request.form.get("username")
+
+        # Validating username
+        if type(username) != str:
+            return apology("Username must be a string.")
+
+        if username.isspace() or len(username) < 1:
+            return apology("Empty username, try again.")
+
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        # Validating password
+        if username == "" or len(Users.query.filter_by(username=username).all()) > 0:
+            return redirect('/')
+        if password == "" or password != confirmation:
+            return redirect('/')
+
+        # Add user to db
+        response_from_db = Users.query.filter_by(username=username).first()
+        if response_from_db:
+            return redirect('/')
         
+        # Commit new user
+        new_user = Users(username=username,
+                         password_hash=generate_password_hash(password),)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect("/create")
+
+    else:
+        return render_template("register.html")
+
+
+@app.route('/logout')
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    return redirect("/")
+
 #TODO: add contact information
 @app.route('/about')
 def about():

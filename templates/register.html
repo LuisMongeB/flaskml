@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content  %}
+<form action="/register" method="post">
+    <div class="mb-3">
+        <h1 class="text-center">Register</h1>
+        <input autocomplete="off" autofocus class="form-control mx-auto justify-content-center w-25" id="username" name="username"
+            placeholder="Username" type="text">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto justify-content-center w-25" id="password" name="password" placeholder="Password" type="password">
+    </div>
+    <div>
+        <button class="btn btn-primary mx-auto d-flex justify-content-center w-25" type="submit">Register</button>
+    </div>
+</form>
+<div class="mb-3 mt-2">
+    <p class="mx-auto d-flex justify-content-center font-weight-normal"><a href="/login">Log In</a>!</p>
+</div>
+{% endblock %}
