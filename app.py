@@ -17,7 +17,7 @@ from models.definitions.resnets import ResNet50
 from deepdream import deep_dream_static_image
 from utils.constants import *
 from utils.utils import *
-from utils.flask_utils import login_required, apology
+from utils.flask_utils import login_required
 from db_models.db_models import db, Upload, Generate, Users
 from flask_migrate import Migrate
 
@@ -69,7 +69,7 @@ def login():
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return flash("Provide a password")
 
         # Query database for username
         
@@ -195,10 +195,10 @@ def register():
 
         # Validating username
         if type(username) != str:
-            return apology("Username must be a string.")
+            return flash("Username must be a string.")
 
         if username.isspace() or len(username) < 1:
-            return apology("Empty username, try again.")
+            return flash("Empty username, try again.")
 
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
