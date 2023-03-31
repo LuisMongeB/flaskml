@@ -8,5 +8,5 @@ opencv_python_headless==4.6.0.66
 scipy==1.10.0
 torch==1.13.1
 torchvision==0.14.1
-Werkzeug==2.2.2
+Werkzeug==2.2.3
 python-dotenv==0.21.1
