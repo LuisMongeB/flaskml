@@ -22,7 +22,7 @@ class Generate(db.Model):
     created_on = db.Column(db.DateTime, server_default=db.func.now())
 
 class Users(db.Model):
-    __tablename__='users'
+    __tablename__= 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     date_added = db.Column(db.DateTime, server_default=db.func.now())
