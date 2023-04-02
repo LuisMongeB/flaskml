@@ -7,7 +7,6 @@ import os
 # Flask
 from flask import Flask, flash, request, redirect, url_for, render_template, send_file, session
 from flask_session import Session
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -20,7 +19,6 @@ from utils.utils import *
 from utils.flask_utils import login_required
 from db_models.db_models import db, Upload, Generate, Users
 from flask_migrate import Migrate
-
 
 import cv2
 import numpy as np
@@ -71,19 +69,18 @@ def login():
         elif not request.form.get("password"):
             return flash("Provide a password")
 
-        # Query database for username
-        
-        rows = Users.query.filter_by(username=request.form.get("username")).all()
+        # Query database for username using sqlalchemy 
+        rows = Users.query.filter_by(username=request.form.get("username")).first()
+        print(rows.username)
 
-        # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return redirect("/")
+        if rows is None or not check_password_hash(rows.password_hash, request.form.get("password")):
+            return redirect("/create")
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows.id
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/create")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -216,7 +213,7 @@ def register():
         
         # Commit new user
         new_user = Users(username=username,
-                         password_hash=generate_password_hash(password),)
+                         password_hash=generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
         return redirect("/create")
