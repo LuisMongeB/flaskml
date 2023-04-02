@@ -19,7 +19,8 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 1. Open Anaconda Prompt and navigate into project directory `cd path_to_repo`
 2. Create your own environment using Python version 3.9.15 like this `conda create --name flaskml python=3.9.15` and run `pip install -r requirementstxt`
 3. Activate your environment `conda activate YOUR_ENV_NAME` after creating your own environment. 
-
+4. Last we need to create the database models. Open terminal and run `python`. Then, run `from app import app, db` followed by `with app.app_context(): db.create_all()`
+ 
 ## Built with
 - Python 3.9.15
 - PyTorch 1.13.1
