@@ -22,6 +22,8 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 4. Last we need to create the database models. Open terminal and run `python`. Then, run `from app import app, db` followed by `with app.app_context(): db.create_all()` and then press `CTR-C` to exit the Python interpreter.
 5. In the terminal: `flask run` and you're done!
 
+For any issues or comments, reach out please!
+
 ## Built with
 - Python 3.9.15
 - PyTorch 1.13.1
