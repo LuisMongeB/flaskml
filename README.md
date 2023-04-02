@@ -27,7 +27,7 @@ It is not anywhere near perfect but I am working (and learning) to improve it wh
 - PyTorch 1.13.1
 - Torchvision 0.14.1
 - Flask (with Bootstrap and Jinja2 templating)
-- Sqlite3 (with SQLAlchemy) and DB Browswer for SQLite
+- Sqlite3 (with SQLAlchemy) and DB Browser for SQLite
 
 ## Future Updates
 - [] Migration to more scalable database // this is pending
