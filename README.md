@@ -31,11 +31,6 @@ For any issues or comments, reach out please!
 - Flask (with Bootstrap and Jinja2 templating)
 - Sqlite3 (with SQLAlchemy) and DB Browser for SQLite
 
-## Future Updates
-- [] Migration to more scalable database // this is pending
-- [] Compatibility issues with Windows
-- [] Deployment on cloud services (AWS or Azure) // this is pending 
-
 ## Contribution
 Contributions, issues, and feature requests are welcome!
 Give a ⭐️ if you like this project!
