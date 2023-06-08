@@ -1,4 +1,4 @@
-Flask==2.2.2
+Flask>=2.2.5
 Flask_Migrate==4.0.4
 flask_sqlalchemy==3.0.3
 Flask_Session==0.4.0
